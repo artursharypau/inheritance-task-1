@@ -19,32 +19,38 @@ namespace inheritance_task_1
             };
         }
 
-        public void AddToTheBill(int quantity)
+        public override void Add(int quantity)
         {
             Console.Write("Choose an apartment (0 - 5): ");
 
             if (Int32.TryParse(Console.ReadLine(), out int index))
             {
                 _apartments[index].Add(quantity);
-                Add(quantity);
+                base.Add(quantity);
             }
         }
 
-        public int ShowTheBillOfOneApartment()
+        public override int Show(BillSelection selection)
         {
+            if (selection == BillSelection.FloorBill)
+            {
+                return ShowTotalBill();
+            }
+
             Console.Write("Choose an apartment (0 - 5): ");
 
             if (Int32.TryParse(Console.ReadLine(), out int index))
             {
-                return _apartments[index].Show();
+                return selection switch
+                {
+                    BillSelection.ApartmentBill =>
+                    _apartments[index].Show(selection),
+
+                    _ => throw new Exception(),
+                };
             }
 
             return default;
-        }
-
-        public int ShowTheTotalBillOfTheFloor()
-        {
-            return Show();
         }
     }
 }

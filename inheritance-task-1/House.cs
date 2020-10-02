@@ -18,60 +18,44 @@ namespace inheritance_task_1
             };
         }
 
-        public void AddToTheBill()
+        public override void Add(int quantity)
         {
-            var quantity = EnterTheAmount();
-
             Console.Write("Choose an entrance (0 - 4): ");
 
             if (Int32.TryParse(Console.ReadLine(), out int index))
             {
-                _entrances[index].AddToTheBill(quantity);
-                Add(quantity);
+                _entrances[index].Add(quantity);
+                base.Add(quantity);
             }
         }
 
-        public int ShowTheBill(OperationSelection selection)
+        public override int Show(BillSelection selection)
         {
+            if (selection == BillSelection.HouseBill)
+            {
+                return ShowTotalBill();
+            }
+
             Console.Write("Choose an entrance (0 - 4): ");
 
             if (Int32.TryParse(Console.ReadLine(), out int index))
             {
                 return selection switch
                 {
-                    OperationSelection.ApartmentBill =>
-                    _entrances[index].ShowTheBill(selection),
+                    BillSelection.ApartmentBill =>
+                    _entrances[index].Show(selection),
 
-                    OperationSelection.FloorBill =>
-                    _entrances[index].ShowTheBill(selection),
+                    BillSelection.FloorBill =>
+                    _entrances[index].Show(selection),
 
-                    OperationSelection.EntranceBill =>
-                    _entrances[index].ShowTheTotalBillOfTheEntrance(),
+                    BillSelection.EntranceBill =>
+                    _entrances[index].Show(selection),
 
                     _ => throw new Exception(),
                 };
             }
 
             return default;
-        }
-
-        public int ShowTheTotalBillOfTheHouse()
-        {
-            return Show();
-        }
-
-        private int EnterTheAmount()
-        {
-            Console.Write("Make payment: ");
-
-            if (Int32.TryParse(Console.ReadLine(), out int quantity) &&
-                quantity <= Int32.MaxValue &&
-                quantity > 0)
-            {
-                return quantity;
-            }
-
-            throw new InvalidOperationException();
         }
     }
 }

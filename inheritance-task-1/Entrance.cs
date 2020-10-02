@@ -22,41 +22,41 @@ namespace inheritance_task_1
             };
         }
 
-        public void AddToTheBill(int quantity)
+        public override void Add(int quantity)
         {
             Console.Write("Choose a floor (0 - 8): ");
 
             if (Int32.TryParse(Console.ReadLine(), out int index))
             {
-                _floors[index].AddToTheBill(quantity);
-                Add(quantity);
+                _floors[index].Add(quantity);
+                base.Add(quantity);
             }
         }
 
-        public int ShowTheBill(OperationSelection selection)
+        public override int Show(BillSelection selection)
         {
-            Console.Write("Choose an entrance (0 - 4): ");
+            if (selection == BillSelection.EntranceBill)
+            {
+                return ShowTotalBill();
+            }
+
+            Console.Write("Choose a floor (0 - 4): ");
 
             if (Int32.TryParse(Console.ReadLine(), out int index))
             {
                 return selection switch
                 {
-                    OperationSelection.ApartmentBill => 
-                    _floors[index].ShowTheBillOfOneApartment(),
+                    BillSelection.ApartmentBill =>
+                    _floors[index].Show(selection),
 
-                    OperationSelection.FloorBill => 
-                    _floors[index].ShowTheTotalBillOfTheFloor(),
+                    BillSelection.FloorBill =>
+                    _floors[index].Show(selection),
 
                     _ => throw new Exception(),
                 };
             }
 
             return default;
-        }
-
-        public int ShowTheTotalBillOfTheEntrance()
-        {
-            return Show();
         }
     }
 }

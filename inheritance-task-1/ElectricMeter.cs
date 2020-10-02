@@ -4,12 +4,17 @@
     {
         private int Bill { get; set; }
 
-        public void Add(int quantity)
+        public virtual void Add(int quantity)
         {
             Bill += quantity;
         }
 
-        public int Show()
+        public virtual int Show(BillSelection selection)
+        {
+            return Bill;
+        }
+
+        public int ShowTotalBill()
         {
             return Bill;
         }
